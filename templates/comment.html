@@ -22,6 +22,7 @@
                 <!-- Use 'with' to rename for clarity -->
                 <div class="follow-item">
                     <div class="follow-user">
+                        <a href="{% url 'profile' commented.user.username %}" class="follow-username">
                         {% if commented.user.profile.profile_image %}
                             <img src="{{ commented.user.profile.profile_image.url }}" class="follow-avatar" alt="User">
                         {% else %}
@@ -29,7 +30,7 @@
                         {% endif %}
                         <div class="follow-info">
                             <!-- CORRECTED: Use user.username instead of following.user.username -->
-                            <a href="{% url 'profile' commented.user.username %}" class="follow-username">
+                            
                                 {{ commented.user.username }}
                             </a>
                             <span class="follow-name">
