@@ -1,1 +1,0 @@
-from post.models import Follow
