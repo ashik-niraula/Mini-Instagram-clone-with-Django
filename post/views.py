@@ -203,7 +203,9 @@ def like_post(request, post_id):
 def likes_page(request,post_id):
     post = get_object_or_404(Post,id=post_id)
     users_liked = Like.objects.filter(post=post)
-
+    data = request.GET.get('search')
+    if data:
+        users_liked = users_liked.filter(user__username__icontains=data)
     context = {
         'users_liked':users_liked
     }
@@ -282,7 +284,21 @@ def edit_comment(request,comment_id):
         return render(request,'edit_comment.html',context)
     else:
         logout(request)
-        
+
+@login_required(login_url='login')
+def comments_page(request,post_id):
+    post = get_object_or_404(Post,id=post_id)
+    users_commented = Comment.objects.filter(post=post)
+    data = request.GET.get('search')
+    if data:
+        users_commented = users_commented.filter(user__username__icontains=data)
+    context = {
+        'users_liked':users_commented
+    }
+    context = {
+        'users_commented':users_commented
+    }
+    return render(request,'comment.html',context)        
 
 @login_required(login_url='login')        
 def save_delete_post(request,post_id):

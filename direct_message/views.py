@@ -4,6 +4,8 @@ from .models import *
 from django.db.models import Q
 
 # Create your views here.
+
+#message Inbox View
 def inbox(request):
     friends = request.user.followers.filter(is_mutual=True)
     conversations = Conversation.objects.filter(
@@ -16,10 +18,12 @@ def inbox(request):
     
     return render(request,'inbox.html',context)
 
+#Chat view
 def dm(request,username):
     friends = request.user.followers.filter(is_mutual=True)
     other_user = get_object_or_404(User,username=username)
     
+    #Filtering the previous Conversations If Exists
     conversation = Conversation.objects.filter(user_1=request.user,user_2=other_user).first()
     if not conversation:
         conversation = Conversation.objects.filter(user_1=other_user,user_2=request.user).first()
@@ -34,6 +38,7 @@ def dm(request,username):
     
     messages = Message.objects.filter(conversation=conversation).order_by('timestamp')
 
+   #for sending message
     if request.method == 'POST':
         text = request.POST.get('text')
         image = request.FILES.get('image')

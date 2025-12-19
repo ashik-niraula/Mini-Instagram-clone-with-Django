@@ -18,7 +18,7 @@
                             <h2> {{profile.user.username}} </h2>
                             {% if user == profile.user %}
                             <a href="{% url "edit"%}" class="btn btn-outline">Edit Profile</a>
-                            <button class="btn btn-outline">View Archive</button>
+                            {% comment %} <button class="btn btn-outline">View Archive</button>  {% endcomment %}
                             <i class="fas fa-cog"></i>
                             {% else %}
                                 
@@ -38,7 +38,7 @@
                                     {% endif %}
                                 </button>
                                 {% if profile.user.id in following_ids and profile.user.id in follower_ids %}
-                                 <a href="{% url "dm" profile.user.username %}" class="follow-btn message">Message</a>
+                                 <button class="follow-btn message"><a href="{% url "dm" profile.user.username %}" >Message</a></button>
                                 {% endif %}
                             {% endif %}
                             

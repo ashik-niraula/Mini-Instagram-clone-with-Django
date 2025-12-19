@@ -24,6 +24,7 @@ urlpatterns = [
 
     path('save-post/<uuid:post_id>/',views.save_delete_post,name='save'), 
 
+    path('comments/<uuid:post_id>',views.comments_page,name='comments'),
     path('delete-comment/<comment_id>/',views.delete_comment,name='del-comment'), 
     path('edit-comment/<comment_id>/',views.edit_comment,name='edit-comment'), 
 

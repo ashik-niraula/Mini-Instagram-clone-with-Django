@@ -115,6 +115,9 @@
                             <a href="{% url 'likes' post.id %}" class="post-likes" id="likes-link-{{ post.id }}">
                                 {{ post.likes_count }} likes
                             </a>
+                            <a href="{% url 'comments' post.id %}" class="post-likes" id="likes-link-{{ post.id }}">
+                                {{ post.comment_count }} comment
+                            </a>
                         </div>
 
                         <!-- Post Caption -->

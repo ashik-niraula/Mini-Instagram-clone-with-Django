@@ -6,8 +6,8 @@
     <div class="suggestions-header">
         <h1>Users Liked the Post</h1>
         <div class="search-box">
-           <form>
-            <input type="text" name='search' placeholder="Search Users Liked...">
+            <form>
+            <input type="text" name='search' placeholder="Search Users commented...">
             <button type="submit">
                 <i class="fas fa-search"></i>
             </button>
@@ -17,23 +17,23 @@
 
     <!-- Following List -->
     <div class="follow-list">
-        {% if users_liked %}
-            {% for liked in users_liked %}
+        {% if users_commented %}
+            {% for commented in users_commented %}
                 <!-- Use 'with' to rename for clarity -->
                 <div class="follow-item">
                     <div class="follow-user">
-                        {% if liked.user.profile.profile_image %}
-                            <img src="{{ liked.user.profile.profile_image.url }}" class="follow-avatar" alt="User">
+                        {% if commented.user.profile.profile_image %}
+                            <img src="{{ commented.user.profile.profile_image.url }}" class="follow-avatar" alt="User">
                         {% else %}
                             <img src="{% static "test/default-user.png" %}" class="follow-avatar" alt="User">
                         {% endif %}
                         <div class="follow-info">
                             <!-- CORRECTED: Use user.username instead of following.user.username -->
-                            <a href="{% url 'profile' liked.user.username %}" class="follow-username">
-                                {{ liked.user.username }}
+                            <a href="{% url 'profile' commented.user.username %}" class="follow-username">
+                                {{ commented.user.username }}
                             </a>
                             <span class="follow-name">
-                                {{ liked.user.first_name }} {{ liked.user.last_name }}
+                                {{ commented.user.first_name }} {{ commented.user.last_name }}
                             </span>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
         {% else %}
             <div class="no-posts">
                  <i class="fab fa-instagram"></i>
-                <h3>No Likes Yet</h3>
+                <h3>No comments Yet</h3>
             </div>
         {% endif %}
     </div>
