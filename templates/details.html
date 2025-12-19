@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+        <main class="post-detail-main">
+            <div class="post-detail-container">
+                <!-- Fixed: Post Image -->
+                <div class="post-image-section">
+                    <img src="{{post.image.url}}" alt="Post Image">
+                </div>
+
+                <!-- Right Column -->
+                <div class="post-details-section">
+                    <!-- Fixed: User Header -->
+                    <div class="post-detail-header">
+                        <div class="post-user-info">
+                            {% if post.user.profile.profile_image %}
+                            <img src="{{post.user.profile.profile_image.url}}" class="post-user-avatar" alt="User">
+                            {% else %}
+                            <img src="{% static "test/default-user.png" %}" class="post-user-avatar" alt="User">
+                            {% endif %}
+                            <div>
+                                <a href="{% url "profile" post.user.username %}" class="post-username"> {{post.user.username}} </a>
+                                <span class="post-location"> {{post.user.profile.location}} </span>
+                                
+                            
+                            <span class="caption-text">{{ post.caption }}</span>
+                        
+                                
+                            </div>
+                        </div>
+                         {% if post.user == request.user %}
+                           <div class="post-options-container">
+                                <label class="post-dots-btn" for="post-menu-{{ post.id }}">⋯</label>
+                                <input type="checkbox" id="post-menu-{{ post.id }}" class="post-menu-toggle">
+                                
+                                <div class="post-options-menu">
+                                    <a href="{% url "edit-post" post.id %}" class="post-menu-item edit-post-btn">Edit</a>
+                                    <a href="{% url "delete-post" post.id %}" class="post-menu-item delete-post-btn">Delete</a>
+                                </div>
+                            </div>
+                            {% endif %}
+                    </div>
+
+                    <!-- Scrollable Area: Comments + Post Actions + Time -->
+                    <div class="comments-scrollable">
+                        <!-- Comments Section -->
+                        <div class="comments-section">
+                            {% if comments %}
+                            {% for comment in comments %}
+                           <div class="comment-item">
+                               {% if comment.user.profile.profile_image %}
+                               <img src="{{comment.user.profile.profile_image.url}}" class="comment-avatar" alt="User">
+                               {% else %} 
+                               <img src="{% static "test/default-user.png" %}" class="comment-avatar" alt="User">
+                                {% endif %}
+
+                               <div class="comment-content">
+                                    <div class="comment-header">
+                                            <a href="{% url "profile" comment.user.username %}" class="comment-username"> {{comment.user.username}} </a>
+                                            <span class="comment-time"> {{comment.created_at|timesince}} </span>
+                                        </div>
+                                        <p class="comment-text"> {{comment.text}} </p>
+                                        {% if comment.user == request.user or comment.post.user == request.user %}
+                                    <div class="comment-options">
+                                        <label class="dots-btn" for="menu-toggle-{{forloop.counter}}">⋯</label>
+                                        <input type="checkbox" id="menu-toggle-{{forloop.counter}}" class="menu-toggle">
+                                        
+                                        <div class="options-menu">
+                                            
+                                            <button class="menu-item delete-btn"><a href="{% url "del-comment" comment.id %}">Delete</a></button>
+                                            
+                                            {% if comment.user == request.user %}
+                                            <button class="menu-item edit-btn"><a href="{% url "edit-comment" comment.id %}">Edit</a></button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                          </div>
+                            {% endfor %}
+                        
+                        
+                            {% else %}
+                            <div class="no-posts">
+                                <i class="fab fa-instagram"></i>
+                                <h3>No Comments Yet</h3>
+                            </div>
+                        
+                         {% endif %}
+                    
+                    
+                        </div> 
+                   </div>     
+                       
+                        <!-- Post Actions & Time (INSIDE scrollable area) -->
+                        <div class="post-actions-sections">
+                            <div class="post-actions">
+                                <button class="like-btn"
+                                        data-id="{{ post.id }}"
+                                        id="like-btn-{{ post.id }}">
+                                    
+                                    {% if post.id in liked_post_ids %}
+                                        <i class="fas fa-heart liked" id="heart-{{ post.id }}"></i>
+                                    {% else %}
+                                        <i class="far fa-heart" id="heart-{{ post.id }}"></i>
+                                    {% endif %}
+                                </button>
+                                
+                                <button  class="post-action-btn"><a href="{% url "detail" post.id %}">
+                                    <i class="far fa-comment"></i>
+                                </a></button>
+                                
+                                <!-- HTML - Update your share button -->
+                                <button class="share-btn" data-post-url="{{ post.get_absolute_url }}">
+                                    <i class="far fa-paper-plane"></i>
+                                </button>
+
+                                <button class="save-btn" data-id="{{ post.id }}">
+                                    {% if post.id in saved_post_ids %}
+                                        <i class="fas fa-bookmark" id="save-icon-{{ post.id }}"></i>
+                                    {% else %}
+                                        <i class="far fa-bookmark" id="save-icon-{{ post.id }}"></i>
+                                    {% endif %}
+                                </button>
+                            </div>
+                            <a href="{% url "likes" post.id %}">
+                            <div class="post-likes" id="likes-link-{{ post.id }}">
+                                {{post.likes_count}} likes
+                            </div>
+                            </a>
+                           
+                            <div class="post-time">
+                                {{post.posted_at|timesince}}
+                            </div>
+                        </div>
+                    
+
+                    <!-- Fixed: Add Comment Input at Bottom -->
+                    <div class="add-comment-section">
+                        {% block form %}
+                      <form method="post">
+                         {% csrf_token %}
+                            <input type="text" class="comment-input" name="comment" required placeholder="Add a comment...">
+                            <button type="submit" class="post-comment-btn">send</button>
+                      </form>
+                      {% endblock form %}
+                    </div>
+                </div>
+            </div>
+        
+        </main>
+        
+{% endblock main %}        
+    

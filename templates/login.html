@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static "test/style.css" %}">
+    <link rel="shortcut icon" href="{% static "test/favicon.svg" %}" type="image/x-icon">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-container">
+            <div class="auth-box">
+                <div class="auth-logo">
+                    <i class="fab fa-instagram"></i>
+                    <h1>Instagram</h1>
+                </div>
+                
+                <!-- Display messages if any -->
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <!-- Toggle option -->
+                <div class="login-mode-toggle">
+                    <button type="button" class="mode-toggle-btn active" data-mode="username">
+                        <i class="fas fa-user"></i> Username
+                    </button>
+                    <button type="button" class="mode-toggle-btn" data-mode="email">
+                        <i class="fas fa-envelope"></i> Email
+                    </button>
+                </div>
+                
+                <form class="auth-form" method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    
+                    <!-- Username input (default) -->
+                    <div class="form-group" id="usernameGroup">
+                        <input type="text" id="username" name="username" 
+                               placeholder="Enter your username" required>
+                    </div>
+                    
+                    <!-- Email input (hidden initially) -->
+                    <div class="form-group" id="emailGroup" style="display: none;">
+                        <input type="email" id="email" name="email" 
+                               placeholder="Enter your email address">
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="password" id="password" name="password" 
+                               placeholder="Password" required>
+                        <button type="button" class="show-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary auth-btn">Log in</button>
+                    
+                    <div class="auth-divider">
+                        <span>OR</span>
+                    </div>
+                    
+                    <a href="#" class="fb-login">
+                        <i class="fab fa-facebook-square"></i>
+                        Log in with Facebook
+                    </a>
+                    
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </form>
+            </div>
+            
+            <div class="auth-switch">
+                <p>Don't have an account? <a href="{% url "signup" %}">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modeToggleBtns = document.querySelectorAll('.mode-toggle-btn');
+            const usernameGroup = document.getElementById('usernameGroup');
+            const emailGroup = document.getElementById('emailGroup');
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const loginForm = document.querySelector('.auth-form');
+            
+            // Handle mode toggle
+            modeToggleBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    modeToggleBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const mode = this.dataset.mode;
+                    
+                    // Show/hide appropriate input
+                    if (mode === 'username') {
+                        usernameGroup.style.display = 'block';
+                        emailGroup.style.display = 'none';
+                        usernameInput.required = true;
+                        emailInput.required = false;
+                        emailInput.disabled = true; // Disable email input
+                        usernameInput.disabled = false; // Enable username input
+                    } else {
+                        usernameGroup.style.display = 'none';
+                        emailGroup.style.display = 'block';
+                        usernameInput.required = false;
+                        emailInput.required = true;
+                        usernameInput.disabled = true; // Disable username input
+                        emailInput.disabled = false; // Enable email input
+                    }
+                });
+            });
+            
+            // Before form submission, remove the unused field
+            loginForm.addEventListener('submit', function(e) {
+                const activeMode = document.querySelector('.mode-toggle-btn.active').dataset.mode;
+                
+                if (activeMode === 'username') {
+                    // Remove email field from form data
+                    emailInput.disabled = true;
+                    emailInput.name = ''; // Remove name attribute so it won't be submitted
+                } else {
+                    // Remove username field from form data
+                    usernameInput.disabled = true;
+                    usernameInput.name = ''; // Remove name attribute so it won't be submitted
+                }
+                
+                // Form will submit normally now
+            });
+            
+            // Show/hide password functionality
+            const showPasswordBtn = document.querySelector('.show-password');
+            const passwordField = document.getElementById('password');
+            
+            if (showPasswordBtn) {
+                showPasswordBtn.addEventListener('click', function() {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    
+                    const eyeIcon = this.querySelector('i');
+                    if (type === 'text') {
+                        eyeIcon.classList.remove('fa-eye');
+                        eyeIcon.classList.add('fa-eye-slash');
+                    } else {
+                        eyeIcon.classList.remove('fa-eye-slash');
+                        eyeIcon.classList.add('fa-eye');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

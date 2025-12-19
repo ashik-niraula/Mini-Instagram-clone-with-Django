@@ -1,0 +1,36 @@
+{% extends "upload_post.html" %}
+{% load static %}
+{% block top %}Edit your Post{% endblock top %}
+{% block form %}
+
+<form method="post" enctype="multipart/form-data"   action="{% url 'edit-post' post.id %}">
+            {% csrf_token %}
+
+            <!-- Upload area -->
+             <div class="upload-area" id="uploadArea">
+                              <div class="post-image-section">
+                    <img src="{{post.image.url}}" alt="Post Image">
+                </div>
+                <input type="file" id="fileInput" name="image" class="hidden">
+                <button type="button" class="btn btn-primary" id="selectBtn">change your Post Picture</button>
+            </div>
+
+            <!-- Preview -->
+            <div class="upload-preview hidden" id="uploadPreview">
+                <img id="previewImage" src="" alt="Preview">
+            </div>
+
+            <!-- Caption -->
+            <textarea class="caption-input" name="caption"> {{post.caption}} </textarea>
+
+            <!-- Actions -->
+            <div class="upload-actions">
+                <a href="{% url 'home' %}" class="btn btn-outline">Cancel</a>
+
+                <!-- FIXED: CHANGED type="button" → type="submit" -->
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+
+        </form>
+
+{% endblock form %}

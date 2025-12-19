@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static "test/style.css" %}">
+    <script src="{% static "test/js/apps.js" %}"></script>
+    <script src="{% static "test/js/like.js" %}"></script>
+    <script src="{% static "test/js/follow.js" %}"></script>
+    <script src="{% static "test/js/save_post.js" %}"></script>
+    <script src="{% static "test/js/share.js" %}"></script>
+    <script src="{% static "test/js/chat.js" %}"></script>
+    <link rel="shortcut icon" href="{% static "test/favicon.svg" %}" type="image/x-icon">
+    
+           
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <nav class="left-sidebar">
+            <a href="{% url "home" %}">
+            <div class="logo">
+                <i class="fab fa-instagram"></i>
+                <h1>Instagram</h1>
+            </div>
+            </a>
+            <div class="nav-menu">
+                <a href="{% url "home" %}" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                
+                <a href="{% url "friends" %}" class="nav-item">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Friends</span>
+                </a>
+                <a href="{% url "inbox" %}" class="nav-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+               
+                <a href="{% url "upload" %}" class="nav-item">
+                    <i class="fas fa-plus-square"></i>
+                    <span>Create</span>
+                </a>
+                {% if user %}
+                <a href="{% url "profile" user.username %}" class="nav-item">
+                    {% if user.profile.profile_image %}
+                    <i class="circle"> <img src="{{user.profile.profile_image.url}}" alt="">  </i>
+                    {% else %}
+                    <i class="fas fa-user-circle"> </i>
+                    {% endif %}
+                    <span>Profile</span>
+                    {% endif %}
+                </a>
+                <a href="{% url "suggestion" %}" class="nav-item">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Suggestions</span>
+                </a>
+            </div>
+            
+            <!-- Dark Mode -->
+            
+            
+            <div class="nav-footer">
+                <a href="{% url "logout" %}" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+       {% block main %}{% endblock main %}
+
+    </div>
+</body>
+</html>

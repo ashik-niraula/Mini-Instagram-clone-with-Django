@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block main %}
+<style>
+                .hidden { display: none; }
+                #previewImage { max-height: 400px; object-fit: contain; }
+            </style>
+<main class="suggestions-main">
+
+    <div class="upload-container">
+        <div class="upload-header">
+            <h2>{% block top %} Create New Post {% endblock top %} </h2>
+        </div>
+
+        <!-- FORM -->
+         {% block form %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Upload area -->
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drag photos here</h3>
+                <p>or click to select from your computer</p>
+
+                <input type="file" id="fileInput" name="image" class="hidden" required>
+                <button type="button" class="btn btn-primary" id="selectBtn">Select from Computer</button>
+            </div>
+
+            <!-- Preview -->
+            <div class="upload-preview hidden" id="uploadPreview">
+                <img id="previewImage" src="" alt="Preview">
+            </div>
+
+            <!-- Caption -->
+            <textarea class="caption-input" name="caption" placeholder="Write a caption..."></textarea>
+
+            <!-- Actions -->
+            <div class="upload-actions">
+                <a href="{% url 'home' %}" class="btn btn-outline">Cancel</a>
+
+                <!-- FIXED: CHANGED type="button" → type="submit" -->
+                <button type="submit" class="btn btn-primary">Share</button>
+            </div>
+
+        </form>
+        {% endblock form %}
+        <!-- END FORM -->
+
+    </div>
+
+</main>
+
+{% endblock main %}

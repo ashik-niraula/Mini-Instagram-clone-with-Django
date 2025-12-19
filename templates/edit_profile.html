@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+ <style>
+        .edit-profile-page { padding: 40px; margin-left: 244px; }
+        .edit-profile-header { display: flex; align-items: center; margin-bottom: 30px; }
+        .back-btn { margin-right: 20px; font-size: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-actions { margin-top: 30px; display: flex; gap: 10px; }
+        .photo-upload { margin-top: 20px; }
+        .change-photo-btn { color: var(--primary); font-weight: 600; cursor: pointer; }
+    </style> 
+    <div class="app-container">
+      
+
+        <main class="edit-profile-page">
+            <div class="edit-profile-header">
+                <a href="{% url "profile" user.username %}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1>Edit Profile</h1>
+            </div>
+
+            <form class="edit-profile-form" method='post' enctype="multipart/form-data" >
+                {% csrf_token %}
+                <div class="profile-photo-edit">
+                    <div class="current-photo">
+                        {% if profile.profile_image %}
+                        <img src="{{profile.profile_image.url}}" id="profilePreview" alt="Current Photo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                        <img src="{% static "test/default-user.png" %}" id="profilePreview" alt="Current Photo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+                       {% endif %}
+                    </div>
+                    <div class="photo-upload">
+                        <label for="id_profile_image" class="change-photo-btn">
+                            Change Profile Photo
+                        </label>
+                        <input type="file" id="id_profile_image" accept="image/*" name ='image'  class="hidden">
+                    </div>
+                </div>
+
+                
+                <div class="form-group">
+                    <label for="id_first_name">First Name</label>
+                    <input type="text" id="id_first_name" name ='first_name' pattern="[A-Z][a-z]*" required value="{{user.first_name}}">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_last_name">Last Name</label>
+                    <input type="text" id="id_last_name" name ='last_name' pattern="[A-Z][a-z]*" required value="{{user.last_name}}">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_bio">Bio</label>
+                    <textarea id="id_bio" maxlength="150" name='bio'> {{profile.bio}} </textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_website">Website</label>
+                    <input type="url" id="id_website" name= 'website' value="{{profile.website}}" placeholder="https://example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_address">Location</label>
+                    <input type="text" id="id_address" name='location' value="{{profile.location}}">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" >Submit</button>
+                    <a href="{% url "profile" user.username %}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        // Profile image preview
+        const profileImageInput = document.getElementById('id_profile_image');
+        const profilePreview = document.getElementById('profilePreview');
+        
+        if (profileImageInput) {
+            profileImageInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profilePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
+    </script>
+    {% endblock main %}

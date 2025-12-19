@@ -1,0 +1,33 @@
+{% extends "profile.html" %}
+{% load static %}
+{% block post_tab_status %}{% endblock post_tab_status %}
+{% block saved_tab_status %} active {% endblock saved_tab_status %}
+
+{% block post_grid %}
+<div class="profile-posts">
+                {% if saved_posts %}
+                  {% for saved in saved_posts %}
+                   <div class="profile-post">
+                    {% if saved.post.image %}
+                    <a href="{% url "detail" saved.post.id %}"><img src="{{saved.post.image.url}}" alt="{{post.user.username}}">
+                    {% else %}
+                    <img src="{% static "test/default-user.png" %}" alt="{{saved.post.user.username}}">
+                    {% endif %}
+                    <div class="post-overlay">
+                        <span><i class="fas fa-heart"></i> {{saved.post.likes_count}} </span>
+                        <span><i class="fas fa-comment"></i> {{saved.post.comment_count}} </span>
+                    </div>
+                </a>
+                </div>
+                
+                  {% endfor %}
+                {% else %}
+                <div class="no-posts">
+                    <i class="fas fa-camera"></i>
+                    <h3>No Posts Yet</h3>
+                </div>    
+                {% endif %}
+                
+            </div>
+
+{% endblock post_grid %}

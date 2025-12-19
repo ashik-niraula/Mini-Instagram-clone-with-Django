@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    <link rel="shortcut icon" href="{% static "test/favicon.svg" %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static "test/style.css" %}">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-container">
+            <div class="auth-box">
+                <div class="auth-logo">
+                    <i class="fab fa-instagram"></i>
+                    <h1>Instagram</h1>
+                </div>
+                
+                <p class="auth-subtitle">Sign up to see photos and videos from your friends.</p>
+                
+                <a href="#" class="fb-login">
+                    <i class="fab fa-facebook-square"></i>
+                    Sign up with Facebook
+                </a>
+                
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+                
+                <form class="auth-form" method="post">
+                    {% csrf_token %}
+                    {% if messages %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for message in messages %} {{message}} {% endfor %}
+                        </div>
+                        {% endif %}
+                    <div class="form-group">
+                        <input type="email" placeholder="Email address" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" placeholder="Username" pattern="^(?!.*\.\.)(?!.*__)[a-z][a-z0-9_.]*[a-z0-9]$" name='username' required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" name="firstname" placeholder="First Name" pattern="[A-Z][a-z]*" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name ='lastname' placeholder="Last Name" pattern="[A-Z][a-z]*" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="password" name='password1' placeholder="Password" required>
+                        <button type="button" class="show-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="password" name='password2' placeholder="Confirm Password" required>
+                    </div>
+                    
+                    <p class="terms-text">
+                        By signing up, you agree to our Terms, Privacy Policy and Cookies Policy.
+                    </p>
+                    
+                    <button type="submit" class="btn btn-primary auth-btn">Sign up</button>
+                </form>
+            </div>
+            
+            <div class="auth-switch">
+                <p>Have an account? <a href="{% url "login" %}">Log in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static "test/js/apps.js" %}"></script>
+</body>
+</html>

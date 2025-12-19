@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main %}
+<main class="suggestions-main">
+    <!-- Header -->
+    <div class="suggestions-header">
+        <h1>Friends</h1>
+        <div class="search-box">
+            
+            <form>
+            <input type="text" name='search' placeholder="Search friends...">
+            <button type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Following List -->
+    <div class="follow-list">
+        {% if friends %}
+            {% for friend in friends %}
+                <!-- Use 'with' to rename for clarity -->
+                {% with friend_user=friend.follower %}
+                <div class="follow-item">
+                    <div class="follow-user">
+                        {% if friend_user.profile.profile_image %}
+                            <img src="{{ friend_user.profile.profile_image.url }}" class="follow-avatar" alt="User">
+                        {% else %}
+                            <img src="{% static "test/default-following_user.png" %}" class="follow-avatar" alt="User">
+                        {% endif %}
+                        <div class="follow-info">
+                            <!-- CORRECTED: Use user.username instead of following.user.username -->
+                            <a href="{% url 'profile' friend_user.username %}" class="follow-username">
+                                {{ friend_user.username }}
+                            </a>
+                            <span class="follow-name">
+                                {{ friend_user.first_name }} {{ friend_user.last_name }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                        <button class="follow-btn following"
+                            data-id="{{ friend_user.id }}"
+                            id="follow-btn-{{ friend_user.id }}">
+                            
+                            {% if friend_user.id in req_mutuals %}
+                                Friends
+                            {% elif friend_user.id in req_following %}
+                                Following
+                            {% elif friend_user.id in req_followers %}
+                                Follow back
+                            {% else %}
+                                Follow
+                            {% endif %}
+                        </button>
+                     {% if friend_user.id in req_mutuals %}
+                                 <a href="{% url "dm" friend_user.username %}" class="follow-btn message">Message</a>
+                                {% endif %}
+                    
+                </div>
+                {% endwith %}
+            {% endfor %}
+        {% else %}
+            <div class="no-posts">
+                 <i class="fab fa-instagram"></i>
+                <h3>No Friends Yet</h3>
+            </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock main %}

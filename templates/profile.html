@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+     <div class="app-container">
+       <main class="suggestions-main">
+            <!-- Profile Header -->
+            
+               <div class="profile-header">
+                <div class="profile-info">
+                    {% if profile.profile_image %}
+                    <img src="{{profile.profile_image.url}}" class="profile-avatar" alt="User">
+                    {% else %}
+                    <img src="{% static "test/default-user.png" %}" class="profile-avatar" alt="User">
+                    {% endif %}
+                    <div class="profile-details">
+                        <div class="profile-username">
+                            <h2> {{profile.user.username}} </h2>
+                            {% if user == profile.user %}
+                            <a href="{% url "edit"%}" class="btn btn-outline">Edit Profile</a>
+                            <button class="btn btn-outline">View Archive</button>
+                            <i class="fas fa-cog"></i>
+                            {% else %}
+                                
+                               <button class="follow-btn following"
+                                        data-id="{{ profile.user.id }}"
+                                        id="follow-btn-{{ profile.user.id }}">
+                                    
+                                    {% if profile.user.id in following_ids and profile.user.id in follower_ids %}
+                                        Friends
+                                       
+                                    {% elif profile.user.id in following_ids %}
+                                        Following
+                                    {% elif profile.user.id in follower_ids %}
+                                        Follow back
+                                    {% else %}
+                                        Follow
+                                    {% endif %}
+                                </button>
+                                {% if profile.user.id in following_ids and profile.user.id in follower_ids %}
+                                 <a href="{% url "dm" profile.user.username %}" class="follow-btn message">Message</a>
+                                {% endif %}
+                            {% endif %}
+                            
+                        </div>
+                        
+                        <div class="profile-stats">
+                            
+                            <a href="{% url "follower" profile.user.username %}" style= "text-decoration:none;">
+                            <div class="stat">
+                                <span class="stat-count"> {{profile.follower_count}} </span>
+                                <span class="stat-label">followers</span>
+                            </div>
+                            </a>
+                            <a href="{% url "following" profile.user.username %}" style= "text-decoration:none;">
+                            <div class="stat">
+                                <span class="stat-count"> {{profile.following_count}} </span>
+                                <span class="stat-label">following</span>
+                            </div>
+                            </a>
+                            
+                            <div class="stat">
+                                <span class="stat-count"> {{profile.total_likes_count}} </span>
+                                <span class="stat-label">likes</span>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-bio">
+                            <h1> {{profile.user.first_name}}  {{profile.user.last_name}} </h1>
+                            <p> {{profile.bio}} </p>
+                            <p> {{profile.location}} </p>
+                            
+                            <a href="#" style= "text-decoration:none;"> {{profile.website}} </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Tabs -->
+             
+            <div class="profile-tabs">
+                <div class="tab {% block post_tab_status %}active{% endblock post_tab_status %} ">
+                    <a href="{% url "profile" profile.user.username %}"><i class="fas fa-th"></i> POSTS({{profile.post_count}})</a>
+                </div>
+                <div class=" tab {% block saved_tab_status %}{% endblock saved_tab_status %}">
+                    <a href="{% url "saved" profile.user.username %}"><i class="far fa-bookmark"></i> SAVED({{profile.saved_post_count}})</a>
+                </div>
+                
+            </div>
+            
+           {% block post_grid %}
+            <!-- Posts Grid -->
+            <div class="profile-posts">
+                {% if user_post %}
+                  {% for post in user_post %}
+                   <div class="profile-post">
+                    {% if post.image %}
+                    <a href="{% url "detail" post.id %}" ><img src="{{post.image.url}}" alt="{{post.user.username}}">
+                    {% else %}
+                    <img src="{% static "test/default-user.png" %}" alt="{{post.user.username}}">
+                    {% endif %}
+                    <div class="post-overlay">
+                        <span><i class="fas fa-heart"></i> {{post.likes_count}} </span>
+                        <span><i class="fas fa-comment"></i> {{post.comment_count}} </span>
+                    </div>
+                    </a>
+                </div>
+                
+                  {% endfor %}
+                {% else %}
+                <div class="no-posts">
+                    <i class="fas fa-camera"></i>
+                    <h3>No Posts Yet</h3>
+                </div>    
+                {% endif %}
+                
+            </div>
+            {% endblock post_grid %}
+        </main>
+    </div>
+{% endblock main %}

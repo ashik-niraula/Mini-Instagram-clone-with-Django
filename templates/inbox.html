@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+ <main class="dm-main">
+            <div class="dm-full-list">
+                <!-- Header -->
+                <div class="dm-header">
+                    <h1>Messages</h1>
+                    <button class="new-message-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+
+                <!-- Search -->
+                <div class="dm-search">
+                    <input type="text" placeholder="Search messages...">
+                </div>
+
+                <!-- Conversations List with BIGGER boxes -->
+                <div class="dm-container">
+                    <!-- Conversation 1 -->
+                     {% if conversations %}
+                     {% for item in conversations%}
+                     {% if item.user_1 == request.user %}
+                    <a href="{% url "dm" item.user_2.username %}" class="dm-conversation">
+                        {% if item.user_2.profile.profile_image %}
+                        <img src="{{item.user_2.profile.profile_image.url}}" class="dm-avatar" alt="User">
+                        {% endif %}
+                        <div class="dm-conversation-info">
+                            <div class="dm-username"> {{item.user_2.username}} </div>
+                            <div class="dm-last-message"> {{item.get_last_message.text|truncatechars:30 }} </div>
+                        </div>
+                        <div class="dm-time"> {{item.last_sent|timesince}} </div>
+                    </a>
+                     {% else %}
+                    <a href="{% url "dm" item.user_1.username %}" class="dm-conversation">
+                        {% if item.user_1.profile.profile_image %}
+                        <img src="{{item.user_1.profile.profile_image.url}}" class="dm-avatar" alt="User">
+                        {% endif %}
+                        <div class="dm-conversation-info">
+                            <div class="dm-username"> {{item.user_1.username}} </div>
+                            <div class="dm-last-message"> {{item.get_last_message.text|truncatechars:30 }} </div>
+                        </div>
+                        <div class="dm-time"> {{item.last_sent|timesince}} </div>
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                     <p class="dm-last-message">No messages</p>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+        {% endblock main %}

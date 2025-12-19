@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+    <div class="app-container">
+
+        <main class="suggestions-main">
+            <div class="suggestions-header">
+                <h1>People You May Know</h1>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search people..." id="searchSuggestions">
+                </div>
+            </div>
+
+            <div class="suggestions-grid">
+                <!-- Suggestion 1 -->
+                {% for suggestion in suggestions  %}
+                   <div class="suggestion-card">
+                        <img src="{{suggestion.profile.profile_image.url}}" class="suggestion-card-avatar" alt="{{suggestion.username}}">
+                        <div class="suggestion-card-info">
+                            <h3> {{suggestion.username}} </h3>
+                            <p> {{suggestion.first_name}} {{suggestion.last_name}} </p>
+                            <p> {{suggestion.profile.bio}} </p>
+                        </div>
+                        <button class="follow-btn following"
+                                data-id="{{ suggestion.id }}"
+                                id="follow-btn-{{ suggestion.id }}">
+                            
+                            {% if suggestion.id in following_ids %}
+                                Following
+                            {% elif suggestion.id in follower_ids %}
+                                Follow back
+                            {% else %}
+                                Follow
+                            {% endif %}
+                        </button>                
+                    </div>
+                {% endfor %}
+               
+            </div>
+        </main>
+    </div>
+
+     
+{% endblock main %}

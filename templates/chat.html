@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+<main class="chat-main">
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <a href="{% url 'inbox' %}" class="chat-back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <a href="{% url 'profile' other_user.username %}">
+                {% if other_user.profile.profile_image %}
+                <img src="{{ other_user.profile.profile_image.url }}" class="chat-avatar" alt="User">
+                {% else %}
+                <img src="{% static 'test/default-user.png' %}" class="chat-avatar" alt="User">
+                {% endif %}
+            </a>
+            <div class="chat-user-info">
+                <a href="{% url 'profile' other_user.username %}" class="chat-username">{{ other_user.username }}</a>
+                <div class="chat-online">Active now</div>
+            </div>
+            <div class="chat-header-actions">
+                <button class="chat-action-btn">
+                    <i class="fas fa-phone"></i>
+                </button>
+                <button class="chat-action-btn">
+                    <i class="fas fa-video"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Messages Section -->
+        <div class="chat-messages" id="chatMessages">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                    {% if message.text %}
+                    <div class="message-text">
+                        {{ message.text }}
+                        {% if message.sender == request.user %}
+                        <div class="msg-menu">
+                            <button class="msg-dots">⋯</button>
+                            <div class="msg-options">
+                                <button class="msg-edit">Edit</button>
+                                <button class="msg-delete">Delete</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if message.image %}
+                    <div class="message-photo">
+                        <img src="{{ message.image.url }}" alt="Photo">
+                        {% if message.sender == request.user %}
+                        <div class="msg-menu">
+                            <button class="msg-dots">⋯</button>
+                            <div class="msg-options">
+                                <button class="msg-edit">Edit</button>
+                                <button class="msg-delete">Delete</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="message-time">{{ message.timestamp|timesince }} ago</div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Input Section -->
+        <form method="POST" enctype="multipart/form-data" id="chatForm">
+            {% csrf_token %}
+            <div class="chat-input-container">
+                <button type="button" class="file-upload-btn" onclick="document.getElementById('imageInput').click()">
+                    <i class="fas fa-camera"></i>
+                </button>
+                
+                <input type="file" id="imageInput" accept="image/*" name="image" class="hidden">
+                <input type="text" class="chat-input" id="messageInput" name="text" placeholder="Message..." autocomplete="off">
+                <button type="submit" class="chat-send-btn" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+{% endblock main %}
