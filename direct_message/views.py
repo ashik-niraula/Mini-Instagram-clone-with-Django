@@ -12,6 +12,9 @@ def inbox(request):
         user_1=request.user)| Conversation.objects.filter(
             user_2 = request.user).order_by('last_sent')
     
+    data = request.GET.get('search')
+    if data:
+        conversations = conversations.filter(Q(user_1__username__icontains=data)|Q(user_2__username__icontains=data))
     context = {
         'conversations':conversations
     }
@@ -52,10 +55,8 @@ def dm(request,username):
             )
         
         return redirect('dm', other_user.username)
-    data = request.GET.get('search')
-    if data:
-        pass
-
+    
+    
     context = {
         'other_user': other_user,
         'messages': messages,

@@ -18,7 +18,12 @@
             </a>
             <div class="chat-user-info">
                 <a href="{% url 'profile' other_user.username %}" class="chat-username">{{ other_user.username }}</a>
+                {% if other_user.is_active %}
                 <div class="chat-online">Active now</div>
+                {% else %}
+                <div class="chat-offline">offline other_user.last_login</div>
+                 {% endif %}
+            
             </div>
             <div class="chat-header-actions">
                 <button class="chat-action-btn">

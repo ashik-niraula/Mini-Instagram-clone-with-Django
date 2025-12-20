@@ -7,14 +7,19 @@
                 <!-- Header -->
                 <div class="dm-header">
                     <h1>Messages</h1>
-                    <button class="new-message-btn">
+                    <a href="{% url "friends" %}" class="new-message-btn">
                         <i class="fas fa-edit"></i>
-                    </button>
+                    </a href="{% url "friends" %}">
                 </div>
 
                 <!-- Search -->
                 <div class="dm-search">
-                    <input type="text" placeholder="Search messages...">
+                    <form>
+            <input type="text" name='search' placeholder="Search friends...">
+            <button type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+            </form>
                 </div>
 
                 <!-- Conversations List with BIGGER boxes -->
