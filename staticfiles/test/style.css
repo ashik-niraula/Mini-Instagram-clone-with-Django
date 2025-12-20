@@ -1415,10 +1415,9 @@ border-radius: 3px;
 }
 
 /* Hide the checkbox */
-.menu-toggle {
-    display: none;
-}
+/* Remove all this code and use this instead: */
 
+/* Three dots button - always visible */
 .dots-btn {
     display: inline-block;
     background: none;
@@ -1427,33 +1426,42 @@ border-radius: 3px;
     cursor: pointer;
     padding: 0 8px;
     font-size: 20px;
-    opacity: 0;
-    transition: opacity 0.2s;
+    margin-left: 8px;
+    vertical-align: middle;
 }
 
-.comment-content:hover .dots-btn {
-    opacity: 1;
+/* Options menu (hidden by default) */
+/* Click to show menu */
+.dots-btn {
+    background: none;
+    border: none;
+    color: #8e8e8e;
+    cursor: pointer;
+    padding: 0 8px;
+    font-size: 20px;
+    margin-left: 8px;
 }
 
+/* Menu hidden by default */
 .options-menu {
     display: none;
     position: absolute;
     right: 0;
-    top: 100%;
+    top: 25px;
     background: white;
     border: 1px solid #dbdbdb;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 100;
-    width: 120px;
-    padding: 8px 0;
+    z-index: 1000;
+    min-width: 120px;
 }
 
-/* Show menu when checkbox is checked */
-.menu-toggle:checked + .options-menu {
+/* Show when dots has 'active' class */
+.dots-btn.active + .options-menu,
+.options-menu:hover {
     display: block;
 }
-
+/* Menu items */
 .menu-item {
     display: block;
     width: 100%;
@@ -1470,16 +1478,15 @@ border-radius: 3px;
     background: #fafafa;
 }
 
-.delete-btn {
+/* Delete button red */
+.menu-item.delete {
     color: #ed4956;
-    font-weight: 600;
 }
 
-.edit-btn {
+/* Edit button blue */
+.menu-item.edit {
     color: #0095f6;
-    font-weight: 600;
 }
-
 /* Close menu when clicking outside - CSS only trick */
 body {
     position: relative;

@@ -1,0 +1,7 @@
+{% extends "chat.html" %}
+{% block text %}
+ <input type="text" class="chat-input" id="messageInput" name="text" value='{{message.text}}' autocomplete="off">
+                <button type="submit" class="chat-send-btn" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+{% endblock text %}

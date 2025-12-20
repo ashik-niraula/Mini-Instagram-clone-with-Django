@@ -37,8 +37,8 @@
 
         <!-- Messages Section -->
         <div class="chat-messages" id="chatMessages">
-            {% if messages %}
-                {% for message in messages %}
+            {% if Messages %}
+                {% for message in Messages %}
                 <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
                     {% if message.text %}
                     <div class="message-text">
@@ -47,8 +47,9 @@
                         <div class="msg-menu">
                             <button class="msg-dots">⋯</button>
                             <div class="msg-options">
-                                <button class="msg-edit">Edit</button>
-                                <button class="msg-delete">Delete</button>
+                                <button class="msg-edit"><a href="{% url "edit-message" message.id other_user.username %}">Edit</a></button>
+                                <button class="msg-delete"><a href="{% url "delete-message" message.id other_user.username %}">Delete</a></button>
+
                             </div>
                         </div>
                         {% endif %}
@@ -62,8 +63,8 @@
                         <div class="msg-menu">
                             <button class="msg-dots">⋯</button>
                             <div class="msg-options">
-                                <button class="msg-edit">Edit</button>
-                                <button class="msg-delete">Delete</button>
+                               
+                                <button class="msg-delete"><a href="{% url "delete-message" message.id other_user.username %}">Delete</a></button>
                             </div>
                         </div>
                         {% endif %}
@@ -74,21 +75,33 @@
                 </div>
                 {% endfor %}
             {% endif %}
-        </div>
 
-        <!-- Input Section -->
-        <form method="POST" enctype="multipart/form-data" id="chatForm">
-            {% csrf_token %}
+
+         {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            <form method="POST" enctype="multipart/form-data" id="chatForm">
+                    {% csrf_token %}
+                    <button type="button" class="file-upload-btn" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-camera"></i>
+                    </button>
             <div class="chat-input-container">
-                <button type="button" class="file-upload-btn" onclick="document.getElementById('imageInput').click()">
-                    <i class="fas fa-camera"></i>
-                </button>
+                
+                {% block text %}
+                
                 
                 <input type="file" id="imageInput" accept="image/*" name="image" class="hidden">
                 <input type="text" class="chat-input" id="messageInput" name="text" placeholder="Message..." autocomplete="off">
                 <button type="submit" class="chat-send-btn" id="sendBtn">
                     <i class="fas fa-paper-plane"></i>
                 </button>
+                {% endblock text %}
             </div>
         </form>
     </div>

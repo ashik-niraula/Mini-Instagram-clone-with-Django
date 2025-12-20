@@ -1956,8 +1956,12 @@ body::before {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     min-width: 100px;
 }
+.message.sent:hover .msg-dots {
+    display: block;
+}
 
-.msg-menu:hover .msg-options {
+/* CHANGED: Only show menu when hovering the container */
+.message.sent:hover .msg-options {
     display: block;
 }
 

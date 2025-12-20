@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here. 
 
 def chat_image_upload_path(instance,filename):
-    return f'user_{instance.user.id}/chat/{filename}'
+    return f'user_{instance.sender.id}/chat/{filename}'
 
 class Conversation(models.Model):
     user_1 = models.ForeignKey(User,related_name='sending_user', on_delete=models.CASCADE)
@@ -18,9 +18,7 @@ class Message(models.Model):
    conversation = models.ForeignKey(Conversation,related_name='conversation_message', on_delete=models.CASCADE)
    sender = models.ForeignKey(User, on_delete=models.CASCADE)
    text = models.TextField(default='')
-   image = models.ImageField(upload_to='chat_image_upload_path',blank=True,null=True)
-   is_seen = models.BooleanField(default=False)
-   edited = models.BooleanField(default=False)
+   image = models.ImageField(upload_to=chat_image_upload_path,blank=True,null=True)
    timestamp = models.DateTimeField(auto_now_add=True)
 
    def __str__(self):

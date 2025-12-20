@@ -247,7 +247,6 @@ def delete_comment(request,comment_id):
     if comment.user == request.user or comment.post.user == request.user:
         comment.delete()
         return redirect('detail',post_id)
-        messages.success(request, "Comment deleted successfully")
     else:
         logout(request) 
     
@@ -267,7 +266,7 @@ def edit_comment(request,comment_id):
             text = request.POST.get('comment')
             user_comment.text = text
             user_comment.save()
-            messages.success(request,'Edited Comment Sucessfully')
+            
             
             return redirect('detail',user_comment.post.id)
         
