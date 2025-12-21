@@ -4,7 +4,7 @@ A mini Instagram-like social media application built using Python and Django, fo
 
 The project was developed mainly for learning purposes, with an emphasis on understanding Django backend workflows, database relationships, and feature integration.
 
-#live preview--> hikniraula.pythonanywhere.com
+# live preview--> hikniraula.pythonanywhere.com
 ---
 
 ## Features
