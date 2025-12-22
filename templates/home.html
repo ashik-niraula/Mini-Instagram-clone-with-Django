@@ -29,7 +29,7 @@
                         {% if user.profile.profile_image %}
                         <img src="{{friend.profile.profile_image.url}}" alt="{{friend.user.username}}">
                         {% else %}
-                        <img src="{% static "test/default-user.png" %}" alt="{{friend.user.username|truncatechars:50}}">
+                        <img src="{% static "test/default-user.png" %}" alt="{{friend.user.username|truncatechars:8}}">
                         {% endif %}
                     </div>
                     <span> {{friend.username}} </span>
